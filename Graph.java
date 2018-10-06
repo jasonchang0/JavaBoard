@@ -1,6 +1,12 @@
 package JavaBoard;
 
+import edu.princeton.cs.algs4.BinaryOut;
+import edu.princeton.cs.algs4.StdOut;
+
 import java.util.*;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class Graph {
     private static final String NEWLINE = System.getProperty("line.separator");
@@ -24,10 +30,11 @@ public class Graph {
         }
 
         for (String e : input_E.keySet()) {
+//            System.out.println(e);
             String[] e_nodes = e.split("-", 2);
 
             V.get(e_nodes[0]).addEdge(V.get(e_nodes[1]), input_E.get(e));
-            V.get(e_nodes[1]).addEdge(V.get(e_nodes[0]), input_E.get(e));
+//            V.get(e_nodes[1]).addEdge(V.get(e_nodes[0]), input_E.get(e));
         }
     }
 
@@ -47,27 +54,43 @@ public class Graph {
         return esize;
     }
 
-    public String traversePath(Map<String, Node> edgeTo, String source) {
+    public String traversePath(Map<String, Node> edgeTo) {
         StringBuilder output = new StringBuilder();
-        output.append(source);
+//        output.append(source);
 
-        while (edgeTo.containsKey(source)) {
-            source = (String) edgeTo.get(source).getVal();
+//        while (edgeTo.containsKey(source)) {
+        for (String s : edgeTo.keySet()) {
+            String des = (String) edgeTo.get(s).getVal();
 //            System.out.println(source);
 
-            output.append(" -> " + source);
+            output.append(s + " -> " + des + NEWLINE);
         }
 
         /**
-        for(String s : edgeTo.keySet()) {
-            StringBuilder out = new StringBuilder();
+         for(String s : edgeTo.keySet()) {
+         StringBuilder out = new StringBuilder();
 
-            out.append(s + " -> ");
-            out.append(edgeTo.get(s).getVal());
+         out.append(s + " -> ");
+         out.append(edgeTo.get(s).getVal());
 
-            System.out.println(out.toString());
+         System.out.println(out.toString());
+         }
+         */
+
+        return output.toString();
+    }
+
+    public String reversePath(Map<String, Node> edgeTo) {
+        StringBuilder output = new StringBuilder();
+//        output.append(source);
+
+//        while (edgeTo.containsKey(source)) {
+        for (String s : edgeTo.keySet()) {
+            String des = (String) edgeTo.get(s).getVal();
+//            System.out.println(source);
+
+            output.append(des + " -> " + s + NEWLINE);
         }
-        */
 
         return output.toString();
     }
@@ -98,25 +121,26 @@ public class Graph {
     public static class DepthFirstPaths {
         private Map<String, Boolean> marked = new HashMap<>();
         private Map<String, Node> edgeTo = new TreeMap<>();
-        private String source;
+//        private String source;
 
         public DepthFirstPaths(Graph G, String source) {
-            this.source = source;
+//            this.source = source;
 
             for (String v : G.getVetex()) {
                 marked.put(v, false);
             }
 
-            dfs(G, this.source);
+            dfs(G, source);
 
-            for(String s : edgeTo.keySet()) {
-                StringBuilder out = new StringBuilder();
+            /**
+             for(String s : edgeTo.keySet()) {
+             StringBuilder out = new StringBuilder();
 
-                out.append(s + " -> ");
-                out.append(edgeTo.get(s).getVal());
+             out.append(s + " -> ");
+             out.append(edgeTo.get(s).getVal());
 
-                System.out.println(out.toString());
-            }
+             System.out.println(out.toString());
+             } */
         }
 
         private void dfs(Graph G, String source) {
@@ -124,12 +148,45 @@ public class Graph {
             for (Object obj : G.getNode(source).getAdj()) {
                 String s = (String) obj;
 //                System.out.println(s);
-                if(!marked.get(s)) {
+                if (!marked.get(s)) {
                     edgeTo.put(s, G.getNode(source));
                     dfs(G, s);
                 }
             }
 //            System.out.println(edgeTo.keySet().size());
+        }
+    }
+
+    public static class BreadthFirstPaths {
+        private Map<String, Boolean> marked = new HashMap<>();
+        private Map<String, Node> edgeTo = new TreeMap<>();
+
+        public BreadthFirstPaths(Graph G, String source) {
+            for (String s : G.getVetex()) {
+                marked.put(s, false);
+            }
+
+            bfs(G, source);
+        }
+
+        private void bfs(Graph G, String source) {
+            Queue<String> fringe = new ConcurrentLinkedQueue<>();
+            fringe.add(source);
+            marked.replace(source, true);
+
+            while(!fringe.isEmpty()) {
+                String v = fringe.poll();
+
+                for (Object obj : G.getNode(v).getAdj()) {
+                    String w = (String) obj;
+                    if(!marked.get(w)) {
+                        fringe.add(w);
+                        marked.replace(w, true);
+                        edgeTo.put(w, G.getNode(v));
+                    }
+                }
+            }
+
         }
     }
 
@@ -150,6 +207,7 @@ public class Graph {
         }
 
         public void addEdge(Node n, int weight) {
+//            System.out.println(n);
             adj.put((T) n.getVal(), weight);
         }
 
@@ -170,13 +228,13 @@ public class Graph {
 
 
     public static void main(String[] args) {
-        String[] lst = new String[]{"A","B","C","D","E","F","A-B","A-F","B-C","B-D","D-C","D-E","C-E", "F-E"};
+        String[] lst = new String[]{"A", "B", "C", "D", "E", "F", "A-B", "A-F", "B-C", "B-D", "D-C", "D-E", "C-E", "F-E"};
 
         int split_index = 0;
         for (int i = 0; i < lst.length; i += 1) {
             String s = lst[i];
 
-            if(s.contains("-")){
+            if (s.contains("-")) {
                 split_index = i;
                 break;
             }
@@ -187,28 +245,40 @@ public class Graph {
 //        System.out.println(lst.length);
 //        System.out.println(lst.length - v_lst.length);
 
-        String[] e_lst = Arrays.copyOfRange(lst, split_index + 1, lst.length);
+        String[] e_lst = Arrays.copyOfRange(lst, split_index, lst.length);
         Integer[] w_lst = new Integer[]{5, 9, 6, 10, 3, 5, 7, 21};
 
         Map<String, Integer> e_map = new TreeMap<>();
 
         assert e_lst.length == w_lst.length;
 
-        for (int i = 0; i < e_lst.length; i += 1){
+        for (int i = 0; i < e_lst.length; i += 1) {
             e_map.put(e_lst[i], w_lst[i]);
         }
 
-        Graph G  = new Graph(v_lst, e_map);
+        Graph G = new Graph(v_lst, e_map);
 
         System.out.println(G);
 
-        DepthFirstPaths p = new DepthFirstPaths(G, v_lst[0]);
-        p.dfs(G, v_lst[0]);
-        
-//        System.out.println(G.traversePath(p.edgeTo, v_lst[0]));
+        DepthFirstPaths dfs_p = new DepthFirstPaths(G, v_lst[0]);
+//        dfs_p.dfs(G, v_lst[0]);
+
+        System.out.println("DFS:");
+        System.out.println(G.traversePath(dfs_p.edgeTo));
+
+        System.out.println("Topological Sort:");
+        System.out.println(G.reversePath(dfs_p.edgeTo));
+
+        BreadthFirstPaths bfs_p = new BreadthFirstPaths(G, v_lst[0]);
+
+        System.out.println("BFS:");
+        System.out.println(G.traversePath(bfs_p.edgeTo));
 
     }
 
 }
+
+
+
 
 

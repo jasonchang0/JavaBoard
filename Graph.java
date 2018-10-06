@@ -50,11 +50,25 @@ public class Graph {
     public String traversePath(Map<String, Node> edgeTo, String source) {
         StringBuilder output = new StringBuilder();
         output.append(source);
+
         while (edgeTo.containsKey(source)) {
             source = (String) edgeTo.get(source).getVal();
-            System.out.println(source);
+//            System.out.println(source);
+
             output.append(" -> " + source);
         }
+
+        /**
+        for(String s : edgeTo.keySet()) {
+            StringBuilder out = new StringBuilder();
+
+            out.append(s + " -> ");
+            out.append(edgeTo.get(s).getVal());
+
+            System.out.println(out.toString());
+        }
+        */
+
         return output.toString();
     }
 
@@ -88,10 +102,20 @@ public class Graph {
 
         public DepthFirstPaths(Graph G, String source) {
             this.source = source;
-            dfs(G, this.source);
 
             for (String v : G.getVetex()) {
                 marked.put(v, false);
+            }
+
+            dfs(G, this.source);
+
+            for(String s : edgeTo.keySet()) {
+                StringBuilder out = new StringBuilder();
+
+                out.append(s + " -> ");
+                out.append(edgeTo.get(s).getVal());
+
+                System.out.println(out.toString());
             }
         }
 
@@ -99,11 +123,13 @@ public class Graph {
             marked.replace(source, true);
             for (Object obj : G.getNode(source).getAdj()) {
                 String s = (String) obj;
-                if(marked.get(s) != null && !marked.get(s)) {
+//                System.out.println(s);
+                if(!marked.get(s)) {
                     edgeTo.put(s, G.getNode(source));
                     dfs(G, s);
                 }
             }
+//            System.out.println(edgeTo.keySet().size());
         }
     }
 
@@ -178,7 +204,8 @@ public class Graph {
 
         DepthFirstPaths p = new DepthFirstPaths(G, v_lst[0]);
         p.dfs(G, v_lst[0]);
-        System.out.println(G.traversePath(p.edgeTo, v_lst[0]));
+        
+//        System.out.println(G.traversePath(p.edgeTo, v_lst[0]));
 
     }
 

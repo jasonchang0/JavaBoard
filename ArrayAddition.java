@@ -2,7 +2,7 @@ package JavaBoard;
 import java.util.*;
 
 
-class Main {
+class ArrayAddition {
     public static boolean ArrayAddition(int[] arr) {
 
         Arrays.sort(arr);

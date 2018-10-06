@@ -31,12 +31,31 @@ public class Graph {
         }
     }
 
+    public Node getNode(String v) {
+        return V.get(v);
+    }
+
+    public Set<String> getVetex() {
+        return V.keySet();
+    }
+
     public int getSize() {
         return size;
     }
 
     public int getESize() {
         return esize;
+    }
+
+    public String traversePath(Map<String, Node> edgeTo, String source) {
+        StringBuilder output = new StringBuilder();
+        output.append(source);
+        while (edgeTo.containsKey(source)) {
+            source = (String) edgeTo.get(source).getVal();
+            System.out.println(source);
+            output.append(" -> " + source);
+        }
+        return output.toString();
     }
 
     private void validateVertex(String v) {
@@ -48,6 +67,7 @@ public class Graph {
     public String toString() {
         StringBuilder s = new StringBuilder();
         s.append(this.getSize() + " vertices, " + this.getESize() + " edges " + NEWLINE);
+
         for (String v : V.keySet()) {
             s.append(v + ": ");
 
@@ -57,7 +77,34 @@ public class Graph {
             }
             s.append(NEWLINE);
         }
+
         return s.toString();
+    }
+
+    public static class DepthFirstPaths {
+        private Map<String, Boolean> marked = new HashMap<>();
+        private Map<String, Node> edgeTo = new TreeMap<>();
+        private String source;
+
+        public DepthFirstPaths(Graph G, String source) {
+            this.source = source;
+            dfs(G, this.source);
+
+            for (String v : G.getVetex()) {
+                marked.put(v, false);
+            }
+        }
+
+        private void dfs(Graph G, String source) {
+            marked.replace(source, true);
+            for (Object obj : G.getNode(source).getAdj()) {
+                String s = (String) obj;
+                if(marked.get(s) != null && !marked.get(s)) {
+                    edgeTo.put(s, G.getNode(source));
+                    dfs(G, s);
+                }
+            }
+        }
     }
 
     private class Node<T> {
@@ -97,7 +144,7 @@ public class Graph {
 
 
     public static void main(String[] args) {
-        String[] lst = new String[]{"A","B","C","D","E","F","G","A-B","A-E","B-C","C-D","D-F","E-D","F-G"};
+        String[] lst = new String[]{"A","B","C","D","E","F","A-B","A-F","B-C","B-D","D-C","D-E","C-E", "F-E"};
 
         int split_index = 0;
         for (int i = 0; i < lst.length; i += 1) {
@@ -115,7 +162,7 @@ public class Graph {
 //        System.out.println(lst.length - v_lst.length);
 
         String[] e_lst = Arrays.copyOfRange(lst, split_index + 1, lst.length);
-        Integer[] w_lst = new Integer[]{5, 25, 16, 56, 78, 24, 35};
+        Integer[] w_lst = new Integer[]{5, 9, 6, 10, 3, 5, 7, 21};
 
         Map<String, Integer> e_map = new TreeMap<>();
 
@@ -128,7 +175,13 @@ public class Graph {
         Graph G  = new Graph(v_lst, e_map);
 
         System.out.println(G);
+
+        DepthFirstPaths p = new DepthFirstPaths(G, v_lst[0]);
+        p.dfs(G, v_lst[0]);
+        System.out.println(G.traversePath(p.edgeTo, v_lst[0]));
+
     }
 
-
 }
+
+

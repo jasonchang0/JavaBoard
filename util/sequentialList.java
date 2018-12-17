@@ -29,7 +29,9 @@ public class sequentialList {
 
         System.out.println("Head: " + head + "\nTail: " + tail);
 
+        // equivalent to remove() calls
         System.out.println(llst.pop());
+
         System.out.println(llst.size());
     }
 }

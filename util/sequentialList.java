@@ -1,4 +1,4 @@
-package JavaBoard.util;
+package util;
 import java.util.LinkedList;
 
 public class sequentialList {
@@ -28,5 +28,8 @@ public class sequentialList {
         int tail = llst.removeLast();
 
         System.out.println("Head: " + head + "\nTail: " + tail);
+
+        System.out.println(llst.pop());
+        System.out.println(llst.size());
     }
 }

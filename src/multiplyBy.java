@@ -1,4 +1,4 @@
-package JavaBoard;
+package src;
 
 public class multiplyBy {
     public static void multiplyBy3(int[] A){

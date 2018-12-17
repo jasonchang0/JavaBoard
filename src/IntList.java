@@ -1,4 +1,4 @@
-package JavaBoard;
+package src;
 
 public class IntList {
     private int head;

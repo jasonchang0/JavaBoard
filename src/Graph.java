@@ -1,11 +1,6 @@
-package JavaBoard;
-
-import edu.princeton.cs.algs4.BinaryOut;
-import edu.princeton.cs.algs4.StdOut;
+package src;
 
 import java.util.*;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class Graph {

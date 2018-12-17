@@ -1,4 +1,4 @@
-package JavaBoard;
+package src;
 import java.util.*;
 
 public class Streams {

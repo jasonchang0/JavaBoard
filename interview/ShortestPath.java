@@ -19,7 +19,7 @@ public class ShortestPath {
 
     static class Graph {
         int size;
-        Map<String, SequentialList<String>> connections;
+        Map<String, LinkedList<String>> connections;
 
         Graph(int size) {
             this.size = size;
@@ -27,15 +27,15 @@ public class ShortestPath {
         }
 
         void addEdge(String src, String dest) {
-            SequentialList<String> connectionsSrc = this.connections.computeIfAbsent(src, k -> new SequentialList<>());
+            LinkedList<String> connectionsSrc = this.connections.computeIfAbsent(src, k -> new LinkedList<>());
             connectionsSrc.addFirst(dest);
-            SequentialList<String> connectionsDest = this.connections.computeIfAbsent(dest, k -> new SequentialList<>());
+            LinkedList<String> connectionsDest = this.connections.computeIfAbsent(dest, k -> new LinkedList<>());
             connectionsDest.addFirst(src);
         }
 
         String shortestPath(String src, String dest) {
             Set<String> visited = new HashSet<>();
-            SequentialList<String> queue = new SequentialList<>();
+            LinkedList<String> queue = new LinkedList<>();
             Map<String, Integer> dist = new HashMap<>();
             Map<String, String> pred = new HashMap<>();
             for (String node : this.connections.keySet()) {
@@ -48,7 +48,7 @@ public class ShortestPath {
             while (!queue.isEmpty()) {
                 String u = queue.getFirst();
                 queue.removeFirst();
-                SequentialList<String> connectedNodes = this.connections.get(u);
+                LinkedList<String> connectedNodes = this.connections.get(u);
                 if (connectedNodes != null) {
                     for (String connectedNode : connectedNodes) {
                         if (!visited.contains(connectedNode)) {
@@ -67,7 +67,7 @@ public class ShortestPath {
         }
 
         private String printPath(Map<String, String> pred, String dest) {
-            SequentialList<String> path = new SequentialList<>();
+            LinkedList<String> path = new LinkedList<>();
             String crawl = dest;
 
             path.addLast(crawl);

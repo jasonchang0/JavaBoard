@@ -1,6 +1,6 @@
 package interview;
 
-public class Arrays {
+public class arrays {
     public static void main(String[] args) {
         /*
         Array is a fixed length data structure

@@ -13,6 +13,7 @@ public class arrayList {
         }
 
         System.out.println(gradeLst.toArray().toString());
+        System.out.println("Length: " + gradeLst.size());
 
         for (int i = 0; i < gradeLst.size(); i += 1) {
             System.out.println(gradeLst.get(i));

@@ -3,7 +3,7 @@ package util;
 import java.util.PriorityQueue;
 
 public class priorityQueue {
-    
+
 
     public static void main(String[] args) {
         double[] scores = new double[]{109.0 / 135, 75.0 / 128, 110.0 / 190};

@@ -476,15 +476,95 @@ public class BST<Key extends Comparable<Key>, Value> {
         Queue<Key> keys = new Queue<>();
         Queue<Node> queue = new Queue<>();
         queue.enqueue(root);
+
         while (!queue.isEmpty()) {
             Node x = queue.dequeue();
-            if (x == null) continue;
+
+            if (x == null) {
+                continue;
+            }
+
             keys.enqueue(x.key);
             queue.enqueue(x.left);
             queue.enqueue(x.right);
         }
         return keys;
     }
+
+    /**
+     * Returns the keys in the BST in pre order (for debugging).
+     *
+     * @return the keys in the BST in pre order depth first traversal
+     */
+    public Iterable<Key> preOrder() {
+        return preOrderDFT(root);
+    }
+
+    /**
+     * Returns the keys in the BST in in order (for debugging).
+     *
+     * @return the keys in the BST in in order depth first traversal
+     */
+    public Iterable<Key> inOrder() {
+        return inOrderDFT(root);
+    }
+
+    /**
+     * Returns the keys in the BST in post order (for debugging).
+     *
+     * @return the keys in the BST in post order depth first traversal
+     */
+    public Iterable<Key> postOrder() {
+        return postOrderDFT(root);
+    }
+
+
+    private Iterable<Key> preOrderDFT(Node x) {
+        Queue<Key> keys = new Queue<>();
+        keys.enqueue(x.key);
+
+        for (Key k : preOrderDFT(x.left)) {
+            keys.enqueue(k);
+        }
+
+        for (Key k : preOrderDFT(x.right)) {
+            keys.enqueue(k);
+        }
+
+        return keys;
+    }
+
+    private Iterable<Key> inOrderDFT(Node x) {
+        Queue<Key> keys = new Queue<>();
+
+        for (Key k : inOrderDFT(x.left)) {
+            keys.enqueue(k);
+        }
+
+        keys.enqueue(x.key);
+
+        for (Key k : inOrderDFT(x.right)) {
+            keys.enqueue(k);
+        }
+
+        return keys;
+    }
+
+    private Iterable<Key> postOrderDFT(Node x) {
+        Queue<Key> keys = new Queue<>();
+
+        for (Key k : postOrderDFT(x.left)) {
+            keys.enqueue(k);
+        }
+
+        for (Key k : postOrderDFT(x.right)) {
+            keys.enqueue(k);
+        }
+
+        keys.enqueue(x.key);
+        return keys;
+    }
+
 
     /*************************************************************************
      *  Check integrity of BST data structure.
@@ -554,6 +634,9 @@ public class BST<Key extends Comparable<Key>, Value> {
             StdOut.println(s + " " + st.get(s));
     }
 }
+
+
+
 
 
 

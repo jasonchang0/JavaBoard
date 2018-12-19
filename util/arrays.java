@@ -1,4 +1,7 @@
 package util;
+
+import java.util.Arrays;
+
 public class arrays {
     public static void main(String[] args) {
         /*
@@ -20,5 +23,6 @@ public class arrays {
 
             System.out.println(y[i]);
         }
+
     }
 }

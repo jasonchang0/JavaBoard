@@ -1,58 +1,42 @@
 package src;
+
 import java.util.*;
+import java.util.stream.IntStream;
 
 
 class ArrayAddition {
-    public static boolean ArrayAddition(int[] arr) {
+    public static Boolean ArrayAddition(int[] arr) {
 
         Arrays.sort(arr);
-        int maxNum = arr[arr.length - 1];
-        int[] nums = Arrays.copyOfRange(arr,0, arr.length - 1);
 
-        int n = nums.length;
-        for (int i = 0; i < (1 << n); i++) {
-//            System.out.println(1 << n);
+        int target = arr[arr.length - 1];
+        int sum = 0;
 
-            List<Integer> subset = new ArrayList<>();
+        if (IntStream.of(arr).anyMatch(x -> x == 1)) {
+            return true;
+        }
 
-            /*
-            The "if" condition ((bitmask >> i) & 1) == 0
-            checks whether the i'th bit in bitmask has been set,
-            ie., whether the i'th character has already been added
-            in the string. If it is not added,
-            only then the character gets appended, otherwise not.
-             */
+        for (int i = 0; i < arr.length - 1; i += 1) {
+            sum += arr[i];
+            if (sum > target) {
+                arr = Arrays.copyOfRange(arr, 0, i + 1);
+                arr[arr.length - 1] = target - sum - arr[i];
 
-            for (int j = 0; j < n; j++) {
-                if ((i & (1 << j)) > 0) {
-                    System.out.println(i + " : " + Integer.toString(1 << j));
-                    System.out.println(j);
-                    subset.add(nums[j]);
-                }
-                else {
-                    System.out.print("False: ");
-                    System.out.println(i + " : " + Integer.toString(1 << j));
-                    System.out.println((i & (1 << j)));
-                }
-                System.out.println();
-            }
-            if (subset.size() > 1) {
-                int sum = subset.stream().mapToInt(index -> index).sum();
-//                subset.stream().mapToInt(index -> index).forEach(System.out::print);
-//                System.out.println();
+                return ArrayAddition(arr);
 
-                if (sum == maxNum) {
-                    return true;
-                }
+            } else if (sum == target) {
+                return true;
             }
         }
+
         return false;
+
     }
 
-    public static void main (String[] args) {
+    public static void main(String[] args) {
         // keep this function call here
 
-        System.out.println(ArrayAddition(new int[] {11,27,32,100}));
+        System.out.println(ArrayAddition(new int[]{54,49,1,0,7,4}));
 //        Scanner s = new Scanner(System.in);
 //        System.out.print(ArrayAddition((int[]) s.nextLine()));
     }

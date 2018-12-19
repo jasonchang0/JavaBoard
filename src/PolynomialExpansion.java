@@ -1,8 +1,9 @@
 package src;
+
 import java.util.*;
 
 public class PolynomialExpansion {
-    private class Term {
+    private class Term implements Comparable<Term> {
         private int coefficient;
         private int power;
 
@@ -22,7 +23,7 @@ public class PolynomialExpansion {
         }
 
         @Override
-        public boolean equals(Object o){
+        public boolean equals(Object o) {
             Term t = (Term) o;
             return this.coefficient == t.coefficient && this.power == t.power;
         }
@@ -35,6 +36,11 @@ public class PolynomialExpansion {
         @Override
         public String toString() {
             return this.coefficient + "X^" + this.power;
+        }
+
+        @Override
+        public int compareTo(Term t) {
+            return (int) Math.round(Math.pow(this.coefficient - t.coefficient, this.power - t.power));
         }
     }
 
@@ -63,7 +69,7 @@ public class PolynomialExpansion {
             terms.add(new ArrayList<>());
         }
 
-        for (int i = 0; i < groups.size(); i += 1){
+        for (int i = 0; i < groups.size(); i += 1) {
             for (String exp : groups.get(i).split("[\\+]")) {
                 terms.get(i).add(new Term(exp));
             }
@@ -111,3 +117,8 @@ public class PolynomialExpansion {
     }
 
 }
+
+
+
+
+
